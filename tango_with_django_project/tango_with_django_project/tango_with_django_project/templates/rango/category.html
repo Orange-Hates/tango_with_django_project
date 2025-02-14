@@ -1,0 +1,48 @@
+{% extends 'rango/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    {% if category %}
+        {{ category.name }}
+    {% else %}
+        Unknown Category
+    {% endif %}
+{% endblock %}
+
+{% block body_block %}
+    <div class="container mt-4">
+        {% if category %}
+            <h1 class="text-primary">{{ category.name }}</h1>
+
+            <!-- Pages List -->
+            {% if pages %}
+                <ul class="list-group">
+                    {% for page in pages %}
+                        <li class="list-group-item">
+                            <a href="{{ page.url }}" target="_blank">{{ page.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted"><strong>No pages currently in this category.</strong></p>
+            {% endif %}
+
+            <!-- Add Page Button (Only for Logged-in Users) -->
+            {% if user.is_authenticated %}
+                <p class="mt-3">
+                    <a href="{% url 'rango:add_page' category.slug %}">Add a Page</a>
+                </p>
+            {% endif %}
+
+        {% else %}
+            <p class="text-danger"><strong>The specified category does not exist.</strong></p>
+        {% endif %}
+
+        <!-- Back to Homepage -->
+        <p class="mt-4">
+            <a href="{% url 'rango:index' %}" class="btn btn-secondary">
+                Back to Homepage
+            </a>
+        </p>
+    </div>
+{% endblock %}
